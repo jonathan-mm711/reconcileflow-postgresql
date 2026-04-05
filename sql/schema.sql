@@ -1,0 +1,112 @@
+DROP TABLE ebra_raw;
+DROP TABLE ebrv_raw;
+DROP TABLE sctef_raw;
+DROP TABLE rdap_1172_raw;
+DROP TABLE rdap_1178_raw;
+DROP TABLE reconciliation_detail;
+DROP TABLE reconciliation_summary;
+
+
+CREATE TABLE IF NOT EXISTS ebra_raw (
+    TRACE_ID              TEXT,
+    AMOUNT           TEXT,
+    TIMESTAMP    TEXT,
+    RESPONSE_CODE   TEXT,
+    ORIGIN_ACCOUNT   TEXT,
+    DESTINATION_ACCOUNT      TEXT,
+    REFERENCE   TEXT,
+    ORIGIN_BANK   TEXT,
+    DESTINATION_BANK   TEXT,
+    ORIGIN_RUT   TEXT,
+    DESTINATION_RUT   TEXT,
+    ORIGIN_NAME   TEXT,
+    MESSAGE_TYPE   TEXT,
+    REFERENCE_2   TEXT,
+    RECONCILIATION_DATE TEXT
+);
+
+CREATE TABLE IF NOT EXISTS ebrv_raw (
+    TRACE_ID              TEXT,
+    AMOUNT           TEXT,
+    TIMESTAMP    TEXT,
+    RESPONSE_CODE   TEXT,
+    ORIGIN_ACCOUNT   TEXT,
+    DESTINATION_ACCOUNT      TEXT,
+    REFERENCE   TEXT,
+    ORIGIN_BANK   TEXT,
+    DESTINATION_BANK   TEXT,
+    ORIGIN_RUT   TEXT,
+    DESTINATION_RUT   TEXT,
+    ORIGIN_NAME   TEXT,
+    MESSAGE_TYPE   TEXT,
+    REFERENCE_2   TEXT,
+    RECONCILIATION_DATE TEXT
+);
+
+CREATE TABLE IF NOT EXISTS sctef_raw (
+    RRN              TEXT,
+    TXN_AMT           TEXT,
+    PROC_CODE    TEXT,
+    FROM_ACC   TEXT,
+    PURGE_DATE   TEXT,
+    TRANSDTIME      TEXT,
+    RECONCILIATION_DATE TEXT
+);
+
+CREATE TABLE IF NOT EXISTS rdap_1172_raw (
+    MERCHANT_CODE              TEXT,
+    TRANSACTION_DATE           TEXT,
+    TRANSACTION_TIME    TEXT,
+    SEQUENCE   TEXT,
+    RUT   TEXT,
+    AMOUNT      TEXT,
+    ACCOUNTING_DATE      TEXT,
+    RESPONSE_CODE      TEXT,
+    RECONCILIATION_DATE TEXT
+);
+
+CREATE TABLE IF NOT EXISTS rdap_1178_raw (
+    MERCHANT_CODE              TEXT,
+    TRANSACTION_DATE           TEXT,
+    TRANSACTION_TIME    TEXT,
+    SEQUENCE   TEXT,
+    RUT   TEXT,
+    AMOUNT      TEXT,
+    ACCOUNTING_DATE      TEXT,
+    RESPONSE_CODE      TEXT,
+    RECONCILIATION_DATE TEXT
+);
+
+CREATE TABLE IF NOT EXISTS reconciliation_detail (
+    ID  TEXT,
+    AMOUNT  TEXT,
+    ORIGIN_ACCOUNT  TEXT,
+    DESTINATION_ACCOUNT TEXT,
+    ORIGIN_RUT  TEXT,
+    DESTINATION_RUT TEXT,
+    TRANSACTION_DATE    TEXT,
+    TRANSACTION_TIME    TEXT,
+    RECONCILIATION_DATE TEXT,
+    STATUS  TEXT,
+    RECONCILIATION  TEXT
+);
+CREATE TABLE IF NOT EXISTS reconciliation_summary (
+    RECONCILIATION  TEXT,
+    RECONCILIATION_DATE TEXT,
+    STATUS  TEXT,
+    TOTAL   TEXT,
+    AMOUNT TEXT
+);
+
+CREATE OR REPLACE FUNCTION format_chilean_rut(raw_rut TEXT)
+RETURNS TEXT
+AS $$
+SELECT
+    CASE
+        WHEN raw_rut IS NULL OR btrim(raw_rut) = '' THEN NULL
+        WHEN length(ltrim(raw_rut, '0')) < 2 THEN ltrim(raw_rut, '0')
+        ELSE LEFT(ltrim(raw_rut, '0'), LENGTH(ltrim(raw_rut, '0')) - 1)
+             || '-' ||
+             RIGHT(ltrim(raw_rut, '0'), 1)
+    END;
+$$ LANGUAGE sql;

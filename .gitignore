@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (raw files - optional)
+data/
+
+# Output files
+output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

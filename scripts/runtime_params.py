@@ -1,0 +1,5 @@
+reconciliation_date = "2025-10-31"
+ebra_dir = r"C:\Users\jhon_\Desktop\portolio-projects\reconcileflow-postgresql\data\EBRA"
+rdap_dir = r"C:\Users\jhon_\Desktop\portolio-projects\reconcileflow-postgresql\data\RDAP"
+sctef_dir = r"C:\Users\jhon_\Desktop\portolio-projects\reconcileflow-postgresql\data\SCTEF"
+output_dir = r"C:\Users\jhon_\Desktop\portolio-projects\reconcileflow-postgresql\output"
